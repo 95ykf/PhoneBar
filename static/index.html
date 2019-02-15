@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>鸿联九五-呼叫中心-电话条</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <!-- 浏览器兼容适配 -->
+    <!--<script src="https://cdn.bootcss.com/babel-polyfill/7.0.0/polyfill.js"></script>-->
+
+    <style type="text/css">
+        body, textarea, input, option {
+            font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            color: #676a6c;
+            overflow-x: hidden;
+        }
+
+        body, div, h1, h2, h3, h4, h5, h6, p, dl, dd, ul, ol, textarea, input, select, form, em, strong, a, span {
+            margin: 0;
+        }
+
+        /* top */
+        .top {
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid #ccc;
+            background: #f3f3f4;
+        }
+
+        .logocon {
+            float: left;
+            width: 200px;
+            height: 50px;
+            line-height: 50px;
+            background: url(./images/logo.png) no-repeat center;
+            background-size: 100% 100%;
+            -moz-background-size: 100% 100%;
+        }
+
+        /* endtop */
+
+        .logBox {
+            border: 1px solid #ccc;
+            height: 280px;
+            overflow: auto;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        fieldset>div {
+            margin: 3px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="top">
+    <div class="logocon"></div>
+    <div id="test1" style="display: inline;"></div>
+    <div id="test2" style="display: inline;float: right;"></div>
+    <div id="test3" style="display: inline;float: right;position: fixed;right: 0;bottom: 0;"></div>
+    <div id="test4" style="display: inline;float: left;position: fixed;left: 0;bottom: 0;"></div>
+</div>
+<div style="padding: 10px;">
+    <!-- 坐席配置 -->
+    <div id="agentConfig">
+        <form>
+            <fieldset>
+                <legend>服务器/客户端设置</legend>
+                <div>
+                    <input type="checkbox" id="startupSoftPhone" name="startupSoftPhone"><label for="startupSoftPhone">自动启动软电话</label>
+                </div>
+                <div>
+                    <label for="ccHostIpTxt">CTI服务地址：</label><input type="text" id="ccHostIpTxt" name="ccHostIpTxt" value="" size="18" maxlength="20">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="sipServerUrl">SIP服务地址：</label><input type="text" id="sipServerUrl" name="sipServerUrl" value="" size="18" maxlength="20">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="corpVccIdTxt">企业标识：</label><input type="text" id="corpVccIdTxt" name="corpVccIdTxt" value="" size="8" maxlength="10">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="agentIdTxt">坐席工号：</label><input type="text" id="agentIdTxt" name="agentIdTxt" value="" size="6" maxlength="8">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="password">密码：</label><input type="password" id="password" name="password" value="" size="10" >
+                </div>
+                <div>
+                    <label for="agentIdTxt">技能组：</label><input type="text" id="thisQueues" name="thisQueues" value="" size="18" maxlength="20">&nbsp;&nbsp;多个技能组以“,”分割
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>坐席配置</legend>
+                <div>
+                    <input type="checkbox" id="autoIdleWhenLogin" name="autoIdleWhenLogin" checked="checked"><label for="autoIdleWhenLogin">自动置闲（登录后自动置闲）</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" id="isPhoneTakeAlong" name="isPhoneTakeAlong"><label for="isPhoneTakeAlong">手机随行</label>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>操作</legend>
+                <input onclick="initPhoneBar();" type="button" value=" 创建话条 "/>
+                <input onclick="destroy();" type="button" value=" 注销话条 "/>
+                <input onclick="emptyLog();" type="button" value=" 清空日志 "/>
+            </fieldset>
+        </form>
+    </div>
+
+    <!-- 日志 -->
+    <div id="log" class="logBox"></div>
+</div>
+
+<script src="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.22.1/locale/zh-cn.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<link href="https://cdn.bootcss.com/layer/2.3/skin/layer.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+
+<!-- 新版sdk -->
+<script>
+    // 电话条
+    var phoneBar = null;
+
+    function initPhoneBar() {
+        if (phoneBar) {
+            phoneBar.destroy();
+        }
+
+        var thisQueues = $('#thisQueues').val() ? $('#thisQueues').val().split(',') : [];
+        phoneBar = new PhoneBar({
+            renderTo: 'test1',
+            proxyUrl: 'ws://' + $("#ccHostIpTxt").val() + '/websocket',
+            sipServerUrl: $('#sipServerUrl').val(),
+            startupSoftPhone: $('#startupSoftPhone').is(':checked'),
+
+            tid: $("#corpVccIdTxt").val(),
+            thisDN: $("#corpVccIdTxt").val() + $("#agentIdTxt").val(),
+            agentID: $("#corpVccIdTxt").val() + $("#agentIdTxt").val(),
+            password: $("#password").val(),
+            thisQueues: thisQueues,
+
+            autoIdleWhenLogin: $("#autoIdleWhenLogin").is(':checked'),
+            isPhoneTakeAlong: $("#isPhoneTakeAlong").is(':checked'),
+
+            onAgentStatusChange: function (newState, beforeValue) {console.log('坐席状态由[' + beforeValue + ']变更为[' + newState+']');},
+            onScreenPopup: function (lineState, callInfo) {console.log('弹屏事件：', lineState, callInfo);},
+            onRinging: function (callInfo) {console.log('振铃事件：', callInfo);},
+            onTalking: function (callInfo) {console.log('接通事件：', callInfo);},
+            onHangup: function (callInfo) {console.log('挂机事件：', callInfo);},
+            onLinkDisconnected: function() {location.href = 'login.html'},
+        });
+    }
+
+    function destroy() {
+        if (phoneBar) {
+            phoneBar.destroy();
+            phoneBar = null;
+        }
+    }
+
+    $(function () {
+        // init();
+    });
+</script>
+
+<script type="text/javascript">
+    PhoneBar.Log.log = function (content, msgType) {
+        var oTextareaInfo = document.getElementById("log");
+        if (oTextareaInfo != null) {
+            if (msgType === 'input') {
+                oTextareaInfo.innerHTML = oTextareaInfo.innerHTML
+                    + '<div class="newmessage" style="font-size:12px;"><span style="color:green">'
+                    + '你发送的信息 ' + moment().format('YYYY-MM-DD HH:mm:ss')
+                    + '</span><br/>'
+                    + content
+                    + '</div>'
+                    + " \r\n";
+            } else if (msgType === 'output') {
+                oTextareaInfo.innerHTML = oTextareaInfo.innerHTML
+                    + '<div class="newmessage" style="font-size:12px;"><span style="color:blue">'
+                    + '服务端回应 ' + moment().format('YYYY-MM-DD HH:mm:ss')
+                    + '</span><br/>'
+                    + content
+                    + '</div>'
+                    + " \r\n";
+            } else {
+                oTextareaInfo.innerHTML = oTextareaInfo.innerHTML
+                    + '<div class="newmessage" style="font-size:12px;"><span style="color:red">'
+                    + content
+                    + '</span></div>'
+                    + " \r\n";
+            }
+            if ($('#log')[0].scrollHeight > $('#log')[0].clientHeight) {
+                $('#log')[0].scrollTop = $('#log')[0].scrollHeight - $('#log')[0].clientHeight;
+            }
+        }
+
+    }
+
+    function emptyLog() {
+        var oTextareaInfo = document.getElementById("log");
+        if (oTextareaInfo != null)
+            oTextareaInfo.innerHTML = "";
+    }
+
+
+    var showMessage = PhoneBar.utils.showMessage = function (msg) {
+        layer.alert(msg, {icon: 7});
+    }
+</script>
+</body>
+</html>

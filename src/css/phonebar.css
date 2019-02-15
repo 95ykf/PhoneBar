@@ -1,0 +1,296 @@
+/* 电话条 start*/
+.phonebar-nav,
+.phonebar-nav ul,
+.phonebar-nav li,
+.phonebar-nav a,
+.phonebar-nav div,
+.phonebar-nav span,
+.phonebar-nav i{
+    box-sizing:border-box
+}
+.phonebar-nav {
+    width: auto;
+    height: auto;
+    display: inline-block;
+    margin: 0;
+    padding: 0
+}
+.phonebar-nav ul {
+    margin: 0;
+    padding: 0
+}
+.phonebar-nav>li {
+    position: relative;
+    display: block
+}
+.phonebar-nav li {
+    list-style: none;
+}
+.phonebar-nav a {
+    display: block;
+    text-decoration: none
+}
+
+
+.phonebar-nav .operation {
+    min-width: 35px;
+    cursor: pointer;
+    padding: 5px;
+    float: left;
+    position: relative
+}
+.phonebar-nav .operation:hover {
+    background: #fff;
+    transition: all .3s ease
+}
+.phonebar-nav .operation.open {
+    background: #fff;
+}
+
+
+/* 精灵图 */
+.phonebar-nav .operation>em {
+    background: url('../assets/images/call_icon.png');
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+}
+
+.phonebar-nav .operation .opendialpad {
+    background-position: -25px 0
+}
+.phonebar-nav .operation.disabled .opendialpad {
+    background-position: -25px -75px
+}
+
+.phonebar-nav .operation .answer {
+    background-position: -50px 0
+}
+.phonebar-nav .operation.disabled .answer {
+    background-position: -50px -75px
+}
+
+.phonebar-nav .operation .hangup {
+    background-position: -75px 0
+}
+.phonebar-nav .operation.disabled .hangup {
+    background-position: -75px -75px
+}
+
+.phonebar-nav .operation .hold {
+    background-position: -100px 0
+}
+.phonebar-nav .operation.disabled .hold {
+    background-position: -100px -75px
+}
+
+.phonebar-nav .operation .retrieve {
+    background-position: -125px 0
+}
+.phonebar-nav .operation.disabled .retrieve {
+    background-position: -125px -75px
+}
+
+.phonebar-nav .operation .rollout {
+    background-position: 0 -50px
+}
+.phonebar-nav .operation.disabled .rollout {
+    background-position: 0 -125px
+}
+
+.phonebar-nav .operation .transfer {
+    background-position: -25px -25px
+}
+.phonebar-nav .operation.disabled .transfer {
+    background-position: -25px -100px
+}
+
+.phonebar-nav .operation .conference {
+    background-position: -50px -25px
+}
+.phonebar-nav .operation.disabled .conference {
+    background-position: -50px -100px
+}
+
+.phonebar-nav .operation_text {
+    display: block;
+    min-width: 35px;
+    height: 15px;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    color: #a7b1c2;
+}
+
+
+/*坐席状态*/
+.phonebar-nav .call {
+    padding: 10px 10px !important;
+}
+.phonebar-nav .call>.agentstate-offline, .agentstate-ready, .agentstate-resting, .agentstate-talking, .agentstate-neatening, .agentstate-ringing, .agentstate-busy {
+    display: block;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+.phonebar-nav .call>span {
+    background: url('../assets/images/call_state.png');
+    display: block;
+    width: 30px;
+    height: 30px;
+}
+.phonebar-nav .call>span.agentstate-ready {
+    background-position: 0 0;
+}
+.phonebar-nav .call>span.agentstate-busy {
+    background-position: 0 -30px;
+}
+.phonebar-nav .call>span.agentstate-resting {
+    background-position: 0 -60px;
+}
+.phonebar-nav .call>span.agentstate-offline {
+    background-position: 0 -90px;
+}
+.phonebar-nav .call>span.agentstate-ringing {
+    background-position: 0 -120px;
+}
+.phonebar-nav .call>span.agentstate-talking {
+    background-position: 0 -150px;
+}
+.phonebar-nav .call>span.agentstate-neatening {
+    background-position: 0 -180px;
+}
+.phonebar-nav .call>.operation_text {
+    width: auto;
+    height: 30px;
+    margin-left: 5px;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    color: #a7b1c2;
+    float: left;
+}
+.phonebar-nav .call>.operation_text span {
+    display: block
+}
+
+.phonebar-nav .dropdown-menu i {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.phonebar-nav .dropdown-menu i.ready {
+    background: #1ab394;
+}
+.phonebar-nav .dropdown-menu i.busy {
+    background: #1c84c6;
+}
+.phonebar-nav .dropdown-menu i.rest {
+    background: #23c6c8;
+}
+.phonebar-nav .dropdown-menu i.login, i.logout {
+    background: #f8ac59;
+}
+
+
+/* 多级菜单 */
+.phonebar-nav .multilevelMenu {
+    position: relative
+}
+
+.phonebar-nav .multilevelMenu>ul {
+    position: absolute;
+    left: 0;
+    top: 100%;
+}
+
+.phonebar-nav .multilevelMenu ul {
+    border-bottom: 1px solid #e7eaec;
+    box-shadow: 0 0 3px rgba(86, 96, 117, 0.3);
+    display: none;
+    z-index: 1000
+}
+
+.phonebar-nav .multilevelMenu li {
+    min-width: 120px;
+    position: relative;
+}
+
+.phonebar-nav .multilevelMenu ul>li ul {
+    position: absolute;
+    top: 0;
+    right: -120px;
+}
+
+.phonebar-nav .multilevelMenu li h3 {
+    height: 30px;
+    line-height: 30px;
+    color: #676a6c;
+    margin: 0;
+    text-align: left;
+    font-size: 12px;
+    padding: 0 5px 0 12px;
+    border-left: 2px solid transparent;
+    border-top: 1px solid #e7eaec
+}
+
+.phonebar-nav .multilevelMenu li h3 i {
+    float: right;
+    height: 30px;
+    line-height: 30px;
+}
+
+.phonebar-nav .multilevelMenu>ul>li h3 {
+    background: #fff;
+}
+.phonebar-nav .multilevelMenu li h3:hover {
+    background: #f5f5f5;
+    border-left: 2px solid #7189e3;
+    color: #7189e3
+}
+.phonebar-nav .multilevelMenu>ul>li h3 span.list{
+    float: right;
+    margin-top:11px;
+    border-left: 4px solid;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    height: 0;
+    width: 0;
+    line-height: normal;
+}
+
+
+/* 会议多方会话 */
+.threewayCallBox {
+    width: 500px;
+    height: 208px;
+    padding: 10px 25px;
+}
+
+.threewayCallBox .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.threewayCallBox .calloption {
+    width: auto;
+    height: 100px;
+    padding: 5px 18px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #e5e6e7;
+    overflow-y: auto
+}
+
+.threewayCallBox .calloption label {
+    margin-right: 25px;
+    margin-bottom: 5px;
+}
+
+

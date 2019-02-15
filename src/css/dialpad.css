@@ -1,0 +1,112 @@
+/* 电话拨号盘  start*/
+.dialpad-container {
+    width: 248px;
+}
+
+.dialpad{
+    width: 234px;
+    height: auto;
+    background: #ececec;
+    padding: 10px 5px 10px 7px;
+}
+.dialpad .select_width {
+    width: 225px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+.dialpad .input-group{
+    position: relative;
+    display: table;
+    border-collapse: separate;
+}
+
+.dialpad .slidedialpad {
+    height:34px;
+}
+.icon-slidedialpad {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background: url('../assets/images/slide-dial-pad.png') no-repeat center;
+    vertical-align: middle;
+}
+.phoneNumber{
+    width: 180px;
+    height: 32px;
+    border: 1px solid #e5e6e7;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    font-size: 14px;
+    background: white;
+    float: left;
+    margin-left: 5px;
+    margin-right: 3px;
+}
+.phoneNumber span{
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    line-height: 33px;
+}
+.phoneNumber .number{
+    float: right;
+    width: 170px;
+    outline: none;
+    border: 0;
+    text-align: right;
+    margin: 6px 6px 0 5px
+}
+.dialpad ul{
+    padding: 0;
+    margin: 0;
+}
+.dialpad ul li{
+    list-style: none;
+    width: 70px;
+    height: 50px;
+    float: left;
+    text-align: center;
+    font-weight: 900;
+    font-size: 25px;
+    line-height: 50px;
+    background: #fbfbfb;
+    margin: 6px 0 0 6px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.dialpad .dialbtn {
+    font-weight: 900;
+    font-size: 15px;
+    line-height: 50px;
+}
+.dialpad ul li i{
+    line-height: 50px;
+}
+.dialpad ul li:hover,
+.phoneNumber span:hover{
+    background: #e2e2e2
+}
+.dialpad ul li:active,
+.phoneNumber span:active{
+    background: #c6c6c6
+}
+.hangup {
+
+}
+.icon-hangup {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background: url('../assets/images/hangup.png') no-repeat center;
+    vertical-align: middle;
+}
+
+.dialpad ul li.backspace img{
+    width: 20px;
+}
+.dialpad .remove,
+.dialpad .ringing_dialpad{
+    font-weight: 900;
+    font-size: 15px;
+    line-height: 50px;
+}
