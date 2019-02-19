@@ -28,6 +28,7 @@ class PhoneBar extends EventEmitter {
      * @param agentID  坐席的工号，与分机号一致
      * @param password 密码
      * @param thisQueues  所在坐席组,类型Array数组(格式如：[100018000,100018001])
+     * @param defaultQueue  默认/签入坐席组,所在技能组中的其中一个
      * @param tipTime  设置后每隔*分钟会自动提醒某一状态是否超时;默认0不提醒
      * @param maxAfterWorkTime  话后持续设置时间后会自动进入就绪状态;默认0不启用
      * @param autoIdleWhenLogin  登录后自动置闲
@@ -53,6 +54,7 @@ class PhoneBar extends EventEmitter {
                     agentID = '',
                     password = '',
                     thisQueues = [],
+                    defaultQueue = '',
 
                     tipTime = 0,
                     maxAfterWorkTime = 0,

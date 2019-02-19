@@ -16,6 +16,7 @@ class Agent extends EventEmitter {
      * @param pstnDN  PSTN号码，可以为null
      * @param agentID  坐席的工号，与分机号一致
      * @param thisQueues  所在坐席组,类型Array数组(格式如：[100018000,100018001])
+     * @param defaultQueue  默认/签入坐席组,所在技能组中的其中一个
      * @param state  坐席当前状态
      */
     constructor({
@@ -23,7 +24,8 @@ class Agent extends EventEmitter {
                     thisDN = '',
                     pstnDN = null,
                     agentID = '',
-                    thisQueues = []
+                    thisQueues = [],
+                    defaultQueue = '',
                 }) {
         super();
         this._tid = tid;
@@ -31,6 +33,7 @@ class Agent extends EventEmitter {
         this._pstnDN = pstnDN;
         this._agentID = agentID;
         this._thisQueues = thisQueues;
+        this._defaultQueue = defaultQueue;
 
         this._state = Agent.OFFLINE;
         this._deviceState = DeviceState.REGISTERED;
@@ -57,6 +60,10 @@ class Agent extends EventEmitter {
 
     get thisQueues() {
         return this._thisQueues;
+    }
+
+    get defaultQueue() {
+        return this._defaultQueue;
     }
 
     get state() {

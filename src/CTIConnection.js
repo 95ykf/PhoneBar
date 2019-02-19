@@ -60,7 +60,8 @@ class CTIConnection extends WebSocketBaseClient {
             "messageId": 100,
             "thisDN": this.agent.thisDN,
             "agentID": this.agent.agentID,
-            "thisQueues": this.agent.thisQueues
+            "thisQueues": this.agent.thisQueues,
+            "defaultQueue": this.agent.defaultQueue,
         };
 
         this.sendMessage({
