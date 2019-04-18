@@ -116,7 +116,7 @@ class CTIConnection extends WebSocketBaseClient {
 
     onOpen(event) {
         this.startKeepAlive(false);
-        //登录成功，且不在通话中，自动置闲(服务器响应为3S)
+        //登录成功，且不在通话中，自动置闲(服务器响应为5S)
         if (this.agentConfig.autoIdleWhenLogin) {
             window.setTimeout(() => {
                 if (this.isOpened() && this.loggedIn &&
@@ -136,14 +136,6 @@ class CTIConnection extends WebSocketBaseClient {
     }
 
     /**
-     * 当与CTI握手成功后事件处理函数
-     */
-    onWelcome() {
-        this.login();
-    }
-
-
-    /**
      * 协议消息转换
      * @param event  event.data是服务器返回数据，其中messageId代表消息类型与常量MessageID对应。
      *               坐席相关事件中event.data.deviceState与常量DeviceState对应。
@@ -152,15 +144,19 @@ class CTIConnection extends WebSocketBaseClient {
     onMessage(event) {
         let data = JSON.parse(event.data);
         if (data == null) return;
-
-        if (data.messageId === MessageID.EventWelcome) {
-            this.onWelcome();
-        }
-
         if (data.messageId !== MessageID.EventWelcome && data.messageId !== MessageID.EventPong) Log.log(JSON.stringify(data), 'output');
+        // CTI握手成功
+        if (data.messageId === MessageID.EventWelcome) {
+            this.login();
+        }
         if (data.messageId === MessageID.EventAgentLogin) {
             window.clearTimeout(this._loginTimeout);
             this.loggedIn = true;
+        }
+        if(!this.loggedIn && data.messageId === MessageID.EventAgentReady){
+            this.agentApi.agentLogout();
+            utils.showMessage("异常就绪,已自动请求登出！");
+            return;
         }
 
         this.emit(data.messageId.toString(), data);

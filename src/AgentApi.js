@@ -58,11 +58,15 @@ class AgentApi {
      */
     agentNotReady(reasonCode) {
         if (this.agentConfig.isPhoneTakeAlong || reasonCode === 1 || reasonCode === 6) return;
+        if (this.agent.state === Agent.OFFLINE) {
+            utils.showMessage('未登入，不能切换状态');
+            return;
+        }
         let data = {
             "messageId": 102,
             "thisDN": this.agent.thisDN,
             "agentID": this.agent.agentID,
-            "reasonCode": reasonCode
+            "reasonCode": reasonCode,
         };
         this.connection.send(data);
     }
@@ -72,7 +76,15 @@ class AgentApi {
      */
     agentReady() {
         if (this.agentConfig.isPhoneTakeAlong) return;
-        let data = {"messageId": 101, "thisDN": this.agent.thisDN, "agentID": this.agent.agentID};
+        if (this.agent.state === Agent.OFFLINE) {
+            utils.showMessage('未登入，不能切换状态');
+            return;
+        }
+        let data = {
+            "messageId": 101,
+            "thisDN": this.agent.thisDN,
+            "agentID": this.agent.agentID,
+        };
         this.connection.send(data);
     }
 
