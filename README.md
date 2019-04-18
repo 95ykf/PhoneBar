@@ -1,5 +1,5 @@
-## 鸿联九五电话条
-电话条对底层通讯和上层业务逻辑深度封装，简化WEB页面集成流程，降低WEB编程难度。开放话务API和基础通话事件，可灵活自定义个性化功能。
+## 九五云客服话条SDK
+电话条SDK对底层通讯和上层业务逻辑深度封装，简化WEB页面集成流程，降低WEB编程难度。开放话务API和基础通话事件，可灵活自定义个性化功能。
 
 文档：[集成解决方案](https://github.com/95ykf/PhoneBar/blob/master/doc/%E9%B8%BF%E8%81%94%E4%B9%9D%E4%BA%94%E4%BA%91%E5%AE%A2%E6%9C%8D-%E7%94%B5%E8%AF%9D%E6%9D%A1%E9%9B%86%E6%88%90%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.docx)
 
@@ -32,12 +32,21 @@ phoneBar = new PhoneBar({
 ![示例图片](https://github.com/95ykf/PhoneBar/blob/master/doc/phonebar.png)
 
 ## 开发
-安装
+### 安装
 ```
 npm install
 ```
-启动调试
+### 启动调试
 ```
 npm start
+```
+### 构建打包
+构建用于生产环境
+```
+npm run build:prod
+```
+构建用于开放环境
+```
+npm run build:dev
 ```
 
