@@ -163,7 +163,7 @@ class ThreewayCallBox extends Dialog {
         let closeButton = document.createElement('button');
         closeButton.type = 'button';
         closeButton.innerText = '关闭';
-        closeButton.onclick = () => {this.destroy();};
+        closeButton.onclick = () => {this.onClose()};
         rightBtnsNode.appendChild(removeSelectedButton);
         rightBtnsNode.appendChild(removeAllButton);
         rightBtnsNode.appendChild(closeButton);
