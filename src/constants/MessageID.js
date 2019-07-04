@@ -35,7 +35,7 @@ export const MessageID = {
     RequestSysSettingsUpdate: 300,
     RequestRecordList: 3001,
     // 监控
-    RequestMonitorAgentInfo:3201,
+    RequestMonitorAgentList:3201,
 
 
     // 响应事件
@@ -89,7 +89,7 @@ export const MessageID = {
     EventTransferMenuList: 3101,
     EventConferenceMenuList: 3102,
     // 监控
-    EventMonitorAgentInfo:3202,
+    EventMonitorAgentList:3202,
     // 错误事件
     EventError: 9999,
 };

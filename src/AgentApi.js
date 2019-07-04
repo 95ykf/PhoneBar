@@ -770,12 +770,10 @@ class AgentApi {
 
     /**
      * 获取可监控的坐席信息
-     * @param callId
-     * @param targetDN
      */
-    requestMonitorMembers(callId, targetDN) {
+    requestMonitorMembers() {
         let data = {
-            "messageId": MessageID.RequestMonitorAgentInfo,
+            "messageId": MessageID.RequestMonitorAgentList,
             "thisDN": this.agent.thisDN,
             "agentID": this.agent.agentID
         };
