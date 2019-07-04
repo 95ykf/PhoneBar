@@ -3,15 +3,12 @@ import EventEmitter from "eventemitter3";
 /**
  * 定时器
  */
-class Timer extends EventEmitter{
+class Timer extends EventEmitter {
 
-    constructor() {
+    constructor(seconds = 0) {
         super();
-        this.second = 0;
-        this.minute = 0;
-        this.hour = 0;
-        this.seconds = 0;
-        this.timeValue = '00:00';
+        this.seconds = seconds;
+        this.startTime = new Date().getTime() - seconds * 1000;
         this.unexecutedTimeouts = [];
     }
 
@@ -23,27 +20,16 @@ class Timer extends EventEmitter{
     start() {
         this.seconds++;
         this._clearUnexecutedTimeouts();
-
-        this.second++;
-        if (this.second === 60) {
-            this.second = 0;
-            this.minute += 1;
-        }
-        if (this.minute === 60) {
-            this.minute = 0;
-            this.hour += 1;
-        }
-        this.timeValue = ((this.minute < 10) ? "0" : "") + this.minute;
-        this.timeValue += ((this.second < 10) ? ":0" : ":") + this.second;
-        if (this.hour > 0) {
-            this.timeValue = ((this.hour < 10) ? "0" : "") + this.hour + ":" + this.timeValue;
-        }
-
-        this.emit('change', this.seconds, this.timeValue);
-
+        // 计算时间误差值
+        let offset = new Date().getTime() - (this.startTime + this.seconds * 1000);
+        let nextTime = 1000 > offset ? (1000 - offset) : 0;
         this.unexecutedTimeouts.push(setTimeout(() => {
             this.start();
-        }, 1000));
+        }, nextTime));
+        // 时间执行不阻塞计时任务
+        setTimeout(() => {
+            this.emit('change', this.seconds, this.format())
+        });
         return this;
     }
 
@@ -54,13 +40,7 @@ class Timer extends EventEmitter{
      */
     stop() {
         this._clearUnexecutedTimeouts();
-        this.second = 0;
-        this.minute = 0;
-        this.hour = 0;
         this.seconds = 0;
-        this.timeValue = '00:00';
-
-        this.emit('change', this.timeValue);
 
         return this;
     }
@@ -68,8 +48,11 @@ class Timer extends EventEmitter{
     /**
      * 任务重启
      */
-    restart() {
+    restart(seconds = 0) {
         this.stop();
+        // 设置计时开始时间
+        this.seconds = seconds;
+        this.startTime = new Date().getTime() - seconds * 1000;
         this.start();
     }
 
@@ -83,6 +66,27 @@ class Timer extends EventEmitter{
             clearTimeout(unexecuted);
         });
         this.unexecutedTimeouts = [];
+    }
+
+    format(separator = [':', ':', '']) {
+        let secondTime = this.seconds;// 秒
+        let minuteTime = 0;// 分
+        let hourTime = 0;// 小时
+        if (secondTime > 60) {
+            minuteTime = Math.floor(secondTime / 60);
+            secondTime = Math.floor(secondTime % 60);
+            if (minuteTime > 60) {
+                hourTime = Math.floor(minuteTime / 60);
+                minuteTime = Math.floor(minuteTime % 60);
+            }
+        }
+        let result = "";
+        if (hourTime > 0) {
+            result += ((hourTime < 10) ? '0' : '') + hourTime + separator[0];
+        }
+        result += ((minuteTime < 10) ? '0' : '') + minuteTime + separator[1];
+        result += ((secondTime < 10) ? '0' : '') + secondTime + separator[2];
+        return result;
     }
 }
 

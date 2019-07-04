@@ -129,18 +129,13 @@
 .phonebar-nav .call {
     padding: 10px 10px !important;
 }
-.phonebar-nav .call>.agentstate-offline, .agentstate-ready, .agentstate-resting, .agentstate-talking, .agentstate-neatening, .agentstate-ringing, .agentstate-busy {
+.phonebar-nav .call>span {
+    background: url('../assets/images/call_state.png');
     display: block;
     background-size: cover;
     width: 30px;
     height: 30px;
     float: left;
-}
-.phonebar-nav .call>span {
-    background: url('../assets/images/call_state.png');
-    display: block;
-    width: 30px;
-    height: 30px;
 }
 .phonebar-nav .call>span.agentstate-ready {
     background-position: 0 0;

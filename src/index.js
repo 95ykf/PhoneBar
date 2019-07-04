@@ -18,7 +18,7 @@ class PhoneBar extends EventEmitter {
 
     /**
      * 构建电话条及核心业务
-     * @param renderTo  页面元素id，渲染到置顶元素内，默认追加到body内
+     * @param renderTo  页面元素id，渲染到指定元素内，默认追加到body内
      * @param proxyUrl  坐席代理服务地址
      * @param startupSoftPhone 是否自动启动软电话，如果自动启动必须配置SIP服务地址
      * @param sipServerUrl SIP服务地址
@@ -101,7 +101,7 @@ class PhoneBar extends EventEmitter {
 
         this.getComponent('agentState').on('agentStateSelected', this._onAgentStateSelected.bind(this));
         this.getComponent('openDialPad').on('click', () => {
-            this._showDialPad({btnName: '呼叫', onDynamicButtonClick: this._makeCall.bind(this)});
+            this._showDialPad({btnName: '呼叫', onDynamicButtonClick: this.makeCall.bind(this, null)});
         });
         this.getComponent('answer').on('click', () => {
             this.agentApi.answerCall();
@@ -161,7 +161,7 @@ class PhoneBar extends EventEmitter {
 
             let _tipTime = this.agentConfig.tipTime;
             if (_tipTime > 0 && seconds > 0 && seconds % (_tipTime * 60) === 0 && this.agent.state !== Agent.BUSY) {
-                let timeTips = `您已保持"${this.agent.getCurrentStateName()}"状态${utils.replaceTimeSeparator(timerValue, ['小时','分钟','秒'])}`;
+                let timeTips = `您已保持"${this.agent.getCurrentStateName()}"状态${this.agent.stateTimer.format(['小时','分钟','秒'])}`;
                 utils.showMessage(timeTips);
             }
 
@@ -180,12 +180,14 @@ class PhoneBar extends EventEmitter {
         this.agent.on('agentStateChange', (state) => {
             this.getComponent('agentState').changeAgentState(state);
 
-            if (state === Agent.READY) {
-                this.phoneBarComponent.changeButtonWhenReady();
-            } else if (state === Agent.BUSY || state === Agent.RESTING || state === Agent.NEATENING) {
-                this.phoneBarComponent.changeButtonWhenNotReady();
-            } else if (state === Agent.OFFLINE) {
-                this.phoneBarComponent.changeButtonWhenLogout();
+            if(this.agent.deviceState === DeviceState.REGISTERED) {
+                if (state === Agent.READY) {
+                    this.phoneBarComponent.changeButtonWhenReady();
+                } else if (state === Agent.BUSY || state === Agent.RESTING || state === Agent.NEATENING) {
+                    this.phoneBarComponent.changeButtonWhenNotReady();
+                } else if (state === Agent.OFFLINE) {
+                    this.phoneBarComponent.changeButtonWhenLogout();
+                }
             }
         });
         // 设备状态变更事件处理函数
@@ -322,10 +324,9 @@ class PhoneBar extends EventEmitter {
 
     /**
      * 主动拨打呼叫
-     * @private
      */
-    _makeCall() {
-        let phoneNumber = this.dialPad.getPhoneNumber();
+    makeCall(phoneNumber) {
+        phoneNumber = phoneNumber || this.dialPad.getPhoneNumber();
         if (phoneNumber.length === 4 && this.agent.tid !== '0') phoneNumber = this.agent.tid + phoneNumber;
         let type = (phoneNumber.length === 9 && phoneNumber.charAt(0) === '1') ? 1 : 3;
         this.agentApi.makeCall(phoneNumber, -1, type);
@@ -508,6 +509,12 @@ class PhoneBar extends EventEmitter {
     destroy() {
         if (this._rootNode && this._rootNode.parentNode) {
             this._rootNode.parentNode.removeChild(this._rootNode);
+        }
+        if (this.dialPad) {
+            this.dialPad.destroy();
+        }
+        if (this.threewayCallBox) {
+            this.threewayCallBox.destroy();
         }
 
         this.agentApi.agentLogout();

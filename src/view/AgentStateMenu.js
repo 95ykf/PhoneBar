@@ -33,6 +33,10 @@ class AgentStateMenu extends EventEmitter {
             {'name': '登入', 'value': 'login', 'visible': true}
         ];
 
+        this._visible = visible;
+        this._enabled = enabled;
+        this._disabledClassName = 'disabled';
+
         utils.isFunction(onAgentStateSelected) && this.on('agentStateSelected', onAgentStateSelected);
 
         this.create();
@@ -47,6 +51,8 @@ class AgentStateMenu extends EventEmitter {
             rootNode.appendChild(this.generateIconNode());
             rootNode.appendChild(this.generateTextNode());
             rootNode.appendChild(this._generateDropdownMenuNode());
+
+            this._visible || this.hide();
 
             rootNode.onclick = (e) => {this._toggleDropdownMenu(e);};
             document.addEventListener('click', this.onBodyClick = this._hideDropdownMenu.bind(this));

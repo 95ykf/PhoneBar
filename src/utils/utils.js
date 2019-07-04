@@ -54,43 +54,6 @@ const utils = {
     },
     trim(str) {
         return str.replace(/(^\s*)|(\s*$)/g, '');
-    },
-    replaceTimeSeparator(time, pattern = [':', ':', ':']) {
-        if (time) {
-            let timeArr = time.split(':').reverse();
-            pattern = pattern.reverse();
-            for (let i = 0, len = timeArr.length; i < len; i++) {
-                timeArr[i] = parseInt(timeArr[i], 10);
-                if (timeArr[i] === 0) {
-                    timeArr[i] = '';
-                } else {
-                    timeArr[i] += pattern[i];
-                }
-            }
-            return timeArr.reverse().join('');
-        }
-        return '';
-    },
-    formatDate(date, pattern = 'yyyy-MM-dd HH:mm:ss') {
-        if (/(y+)/.test(pattern)) {
-            pattern = pattern.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
-        }
-        let o = {
-            'M+': date.getMonth() + 1,
-            'd+': date.getDate(),
-            'H+': date.getHours(),
-            'm+': date.getMinutes(),
-            's+': date.getSeconds(),
-        };
-
-        // 遍历这个对象
-        for (let k in o) {
-            if (new RegExp(`(${k})`).test(pattern)) {
-                let str = o[k] + '';
-                pattern = pattern.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
-            }
-        }
-        return pattern;
     }
 };
 
