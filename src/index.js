@@ -156,7 +156,9 @@ class PhoneBar extends EventEmitter {
             this.updateConferenceMenu(data.menuList);
         });
 
+        // 监听座席状态定时器
         this.agent.stateTimer.on('change', (seconds, timerValue) => {
+            // 更新状态持续时长
             this.getComponent('agentState').setAgentStateTimer(timerValue);
 
             let _tipTime = this.agentConfig.tipTime;

@@ -45,7 +45,7 @@ npm start
 ```
 npm run build:prod
 ```
-构建用于开放环境
+构建用于开发环境
 ```
 npm run build:dev
 ```

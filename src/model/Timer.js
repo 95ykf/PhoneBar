@@ -26,7 +26,7 @@ class Timer extends EventEmitter {
         this.unexecutedTimeouts.push(setTimeout(() => {
             this.start();
         }, nextTime));
-        // 时间执行不阻塞计时任务
+        // 事件的执行不阻塞计时任务
         setTimeout(() => {
             this.emit('change', this.seconds, this.format())
         });

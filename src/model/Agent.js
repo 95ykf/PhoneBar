@@ -111,7 +111,6 @@ class Agent extends EventEmitter {
         return Agent.getStateName(this._state);
     }
 
-    //TODO:此方法命名与非静态方法有冲突，待重命名
     static getStateName(state) {
         return (Agent.stateDict[state] ?  Agent.stateDict[state].name : '');
     }
