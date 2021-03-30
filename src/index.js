@@ -140,18 +140,22 @@ class PhoneBar extends EventEmitter {
      * 事件处理
      */
     eventHandler() {
+        // 三方通话接通
         this.connection.on(MessageID.EventThreeWayEstablished.toString(), (data) => {
             this.threewayCallData.push({'phoneNumber': data.otherDN, 'callID': data.callID});
             !this.threewayCallBox || this.threewayCallBox.join(data.otherDN, data.callID);
         });
+        // 三方通话挂单
         this.connection.on(MessageID.EventThreeWayReleased.toString(), (data) => {
             this.threewayCallData = this.threewayCallData.filter((v) => v.phoneNumber !== data.otherDN);
             !this.threewayCallBox || this.threewayCallBox.remove(data.otherDN);
             utils.showMessage(`${data.otherDN} 已退出会议`);
         });
+        // 转接菜单列表事件
         this.connection.on(MessageID.EventTransferMenuList.toString(), (data) => {
             this.updateTransferMenu(data.menuList);
         });
+        // 转接菜单列表事件
         this.connection.on(MessageID.EventConferenceMenuList.toString(), (data) => {
             this.updateConferenceMenu(data.menuList);
         });
@@ -192,6 +196,7 @@ class PhoneBar extends EventEmitter {
                 }
             }
         });
+
         // 设备状态变更事件处理函数
         this.agent.on('deviceStateChange', (deviceState) => {
             if (deviceState === DeviceState.UNREGISTERED) {
@@ -200,6 +205,7 @@ class PhoneBar extends EventEmitter {
                 this.phoneBarComponent.changeButtonSipOK();
             }
         });
+
         // 线路状态变更事件处理
         this.linePool.on('lineDataChange', (line, callInfo, data) => {
             if (this.linePool.getCurrentLineId() === line.id) {

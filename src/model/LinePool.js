@@ -238,11 +238,13 @@ class LinePool extends EventEmitter {
         let phoneNumber = data.otherDN && data.otherDN !== "Unknown" ? data.otherDN : '';
         let attachDatas = data.attachDatas;
         let creationTime = data.creationTime;
-        let querue = data.thisQueue;
+        let queue = data.thisQueue || null;
 
         let dnis = data.dnis;//被叫号码
         let callSid = data.auuid;//呼叫唯一标识
         let cityCode = data.cityCode;//归属地
+
+        let talkSec = data.talkSec || 0;
 
         return {
             callId,
@@ -250,10 +252,11 @@ class LinePool extends EventEmitter {
             phoneNumber,
             attachDatas,
             creationTime,
-            querue,
+            queue,
             dnis,
             callSid,
             cityCode,
+            talkSec,
         };
     }
 
