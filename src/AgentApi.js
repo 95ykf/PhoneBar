@@ -140,8 +140,8 @@ class AgentApi {
             if (module != null) data["attachDatas"]["module"] = module;
             if (call_id != null) data["attachDatas"]["member_uuid"] = call_id;
             if (queue != null) data["attachDatas"]["ocb_queue"] = queue;
-            if (newTransPara != null) data["attachDatas"]["transPara"] = newTransPara;
-            if (taskId != null) data["attachDatas"]["taskId"] = taskId;
+            if (newTransPara != null) data["attachDatas"]["trans_para"] = newTransPara;
+            if (taskId != null) data["attachDatas"]["task_id"] = taskId;
             if (numberId != null) data["attachDatas"]["numberId"] = numberId;
             return this.connection.send(data);
         } else {
