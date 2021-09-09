@@ -416,15 +416,31 @@ class AgentApi {
         this.connection.send(data);
     };
 
-    //
-    // cti.sendDTMF(lineId, digit) {
-    //     checkLineId(lineId);
-    //     var thisDN = cti.Agent.getInstance().getThisDN();
-    //     var line = cti.LinePool.getInstance().getLine(lineId);
-    //     var callId = line.callId;
-    //     var data = {"messageId":250,"thisDN":thisDN,"callID":callId,"dtmfDigit":digit};
-    //     cti.send(data);
-    // };
+    /**
+     * 发送DTMF
+     *
+     * @param lineId 要挂断的线路ID，当为空时取当前默认线路
+     * @param digit 按键
+     */
+    sendDTMF(lineId, digit) {
+        if (typeof(lineId) === 'undefined' || lineId == null) {
+            lineId = this.linePool.getCurrentLineId();
+        }
+        let line = this.linePool.getLine(lineId);
+        if (null == line) {
+            utils.showMessage("线路ID错误");
+        } else if (line.lineState === LineState.IDLE) {
+            utils.showMessage("当前线路没有电话");
+        } else {
+            return this.connection.send({
+                "messageId": 250,
+                "thisDN": this.agent.thisDN,
+                "callID": line.callId,
+                "dtmfDigit":digit
+            });
+        }
+    }
+
     // cti.updateUserData(lineId, userDataKeys, userDataValues) {
     //     checkLineId(lineId);
     //     var thisDN = cti.Agent.getInstance().getThisDN();
