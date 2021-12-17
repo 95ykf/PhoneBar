@@ -10,6 +10,7 @@ class SoftPhoneConnection extends EventEmitter {
                     urls = ['ws://127.0.0.1:57712', "ws://127.0.0.1:58823"], protocols = [],
 
                     serverUrl, username, password,
+                    loginType = 0,
 
                     automaticOpen = false,
                     pingInterval = 20000
@@ -23,6 +24,7 @@ class SoftPhoneConnection extends EventEmitter {
         this.serverUrl = serverUrl;
         this.username = username;
         this.password = password;
+        this.loginType = loginType;
 
         /** 实例化后是否自动打开 */
         this.automaticOpen = automaticOpen;
@@ -99,7 +101,7 @@ class SoftPhoneConnection extends EventEmitter {
 
     onOpen(aEvent) {
         console.log(aEvent, 'sipphone onConnect', this.getFirstEnabledWSInfo());
-        this.doLogin(this.serverUrl, this.username, this.password);
+        this.doLogin(this.serverUrl, this.username, this.password, this.loginType);
     }
 
     onDisconnected(aEvent, wsInfo) {
@@ -158,11 +160,11 @@ class SoftPhoneConnection extends EventEmitter {
         }
     }
 
-    doLogin(addr, username, password) {
+    doLogin(addr, username, password, loginType=false) {
         if (this.isOpened()) {
             this.send({
                 'action': 'login',
-                'data': {'addr': addr, 'user': username, 'password': password}
+                'data': {'addr': addr, 'user': username, 'password': password, 'loginType': loginType}
             });
         } else {
             this.open();

@@ -68,11 +68,18 @@
                     <input type="checkbox" id="startupSoftPhone" name="startupSoftPhone" checked="checked"><label for="startupSoftPhone">自动启动软电话</label>
                 </div>
                 <div>
-                    <label for="ccHostIpTxt">CTI服务地址：</label><input type="text" id="ccHostIpTxt" name="ccHostIpTxt" value="" size="18" maxlength="20">&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label for="sipServerUrl">SIP服务地址：</label><input type="text" id="sipServerUrl" name="sipServerUrl" value="" size="18" maxlength="20">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="ccHostIpTxt">CTI服务地址：</label><input type="text" id="ccHostIpTxt" name="ccHostIpTxt" value="" size="40" maxlength="40">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label for="sipServerUrl">SIP服务地址：</label><input type="text" id="sipServerUrl" name="sipServerUrl" value="" size="30" maxlength="30">&nbsp;&nbsp;&nbsp;&nbsp;
                     <label for="corpVccIdTxt">企业标识：</label><input type="text" id="corpVccIdTxt" name="corpVccIdTxt" value="" size="8" maxlength="10">&nbsp;&nbsp;&nbsp;&nbsp;
                     <label for="agentIdTxt">坐席工号：</label><input type="text" id="agentIdTxt" name="agentIdTxt" value="" size="6" maxlength="8">&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label for="password">密码：</label><input type="password" id="password" name="password" value="" size="10" >
+                </div>
+                <div>
+                    <label for="loginType">登录方式：</label><select id="loginType" name="loginType">
+                    <option value="0">明文模式</option>
+                    <option value="1">密文模式</option>
+                    <option value="2">随机码+密码 密文模式</option>
+                </select>
+                    <label for="password">密码：</label><input type="password" id="password" name="password" value="" size="104">
                 </div>
                 <div>
                     <label for="agentIdTxt">技能组：</label><input type="text" id="thisQueues" name="thisQueues" value="" size="18" maxlength="20" placeholder="多个技能组以“,”分割">&nbsp;&nbsp;
@@ -130,6 +137,7 @@
             thisDN: $("#corpVccIdTxt").val() + $("#agentIdTxt").val(),
             agentID: $("#corpVccIdTxt").val() + $("#agentIdTxt").val(),
             password: $("#password").val(),
+            loginType: parseInt($('#loginType').val()),
             thisQueues: thisQueues,
             defaultQueue: $('#defaultQueue').val(),
 

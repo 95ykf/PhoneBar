@@ -27,6 +27,7 @@ class PhoneBar extends EventEmitter {
      * @param pstnDN  PSTN号码，可以为null
      * @param agentID  坐席的工号，与分机号一致
      * @param password 密码
+     * @param loginType 密码类型 0 不加密; 1 普通加密; 2 （32位随机数+密码)加密;
      * @param thisQueues  所在坐席组,类型Array数组(格式如：[100018000,100018001])
      * @param defaultQueue  默认/签入坐席组,所在技能组中的其中一个
      * @param tipTime  设置后每隔*分钟会自动提醒某一状态是否超时;默认0不提醒
@@ -53,6 +54,7 @@ class PhoneBar extends EventEmitter {
                     pstnDN = '',
                     agentID = '',
                     password = '',
+                    loginType = 0,
                     thisQueues = [],
                     defaultQueue = '',
 
@@ -93,7 +95,7 @@ class PhoneBar extends EventEmitter {
         // 与软电话websocket
         this.softPhoneConnection = new SoftPhoneConnection({
             'serverUrl':sipServerUrl,
-            'username': agentID, password,
+            'username': agentID, password, loginType
         });
 
         // 初始化ui
