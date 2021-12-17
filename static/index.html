@@ -84,6 +84,7 @@
                 <div>
                     <label for="agentIdTxt">技能组：</label><input type="text" id="thisQueues" name="thisQueues" value="" size="18" maxlength="20" placeholder="多个技能组以“,”分割">&nbsp;&nbsp;
                     <label for="agentIdTxt">签入技能组：</label><input type="text" id="defaultQueue" name="defaultQueue" value="" size="18" maxlength="20" placeholder="技能组中其中一个">&nbsp;&nbsp;
+                    <label for="agentIdTxt">外显号码：</label><input type="text" id="pstnDN" name="pstnDN" value="" size="18" maxlength="20" placeholder="外显号码">&nbsp;&nbsp;
                 </div>
             </fieldset>
             <fieldset>
@@ -140,6 +141,7 @@
             loginType: parseInt($('#loginType').val()),
             thisQueues: thisQueues,
             defaultQueue: $('#defaultQueue').val(),
+            pstnDN: $('#pstnDN').val(),
 
             autoIdleWhenLogin: $("#autoIdleWhenLogin").is(':checked'),
             isPhoneTakeAlong: $("#isPhoneTakeAlong").is(':checked'),
