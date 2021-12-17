@@ -136,13 +136,14 @@ class AgentApi {
                 "messageId": 200, "thisDN": this.agent.thisDN, "agentID": this.agent.agentID, "otherDN": dest,
                 "attachDatas": {"id": id, "type": type, "cti-agentID": this.agent.agentID}
             };
-            if (queue != null) data["thisQueue"] = queue;
-            if (module != null) data["attachDatas"]["module"] = module;
-            if (call_id != null) data["attachDatas"]["member_uuid"] = call_id;
-            if (queue != null) data["attachDatas"]["ocb_queue"] = queue;
-            if (newTransPara != null) data["attachDatas"]["trans_para"] = newTransPara;
-            if (taskId != null) data["attachDatas"]["task_id"] = taskId;
-            if (numberId != null) data["attachDatas"]["numberId"] = numberId;
+            if (queue) data["thisQueue"] = queue;
+            if (this.agent.pstnDN) data["pbxParams"] = {"dnis": this.agent.pstnDN};
+            if (module) data["attachDatas"]["module"] = module;
+            if (call_id) data["attachDatas"]["member_uuid"] = call_id;
+            if (queue) data["attachDatas"]["ocb_queue"] = queue;
+            if (newTransPara) data["attachDatas"]["trans_para"] = newTransPara;
+            if (taskId) data["attachDatas"]["task_id"] = taskId;
+            if (numberId) data["attachDatas"]["numberId"] = numberId;
             return this.connection.send(data);
         } else {
             return false;
