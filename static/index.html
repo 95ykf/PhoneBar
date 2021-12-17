@@ -88,6 +88,8 @@
             </fieldset>
             <fieldset>
                 <legend>操作</legend>
+                <label for="digitTxt">二次拨号号码：</label><input type="text" id="digitTxt" name="digitTxt" value="" size="30" maxlength="30">
+                <input onclick="sendDTMF();" type="button" value=" 二次拨号 "/><br/>
                 <input onclick="initPhoneBar();" type="button" value=" 创建话条 "/>
                 <input onclick="destroy();" type="button" value=" 注销话条 "/>
                 <input onclick="emptyLog();" type="button" value=" 清空日志 "/>
@@ -147,6 +149,19 @@
         if (phoneBar) {
             phoneBar.destroy();
             phoneBar = null;
+        }
+    }
+
+    function sendDTMF() {
+        if (phoneBar) {
+            var digit = $("#digitTxt").val();
+            if (digit && /^[0-9*#]+$/.test(digit)) {
+                phoneBar.agentApi.sendDTMF(null, digit);
+            } else {
+                showMessage('二次拨号仅允许输入0-9,*,#！');
+            }
+        } else {
+            showMessage('话条未初始化！')
         }
     }
 
