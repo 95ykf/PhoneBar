@@ -74,7 +74,7 @@ class AgentApi {
     /**
      * 坐席设置为就绪状态
      */
-    agentReady() {
+    agentReady(isManual=false) {
         if (this.agentConfig.isPhoneTakeAlong) return;
         if (this.agent.state === Agent.OFFLINE) {
             utils.showMessage('未登入，不能切换状态');
@@ -85,6 +85,9 @@ class AgentApi {
             "thisDN": this.agent.thisDN,
             "agentID": this.agent.agentID,
         };
+        if (isManual) {
+            data['reasonCode'] = -3
+        }
         this.connection.send(data);
     }
 
@@ -793,6 +796,19 @@ class AgentApi {
             "messageId": MessageID.RequestMonitorAgentList,
             "thisDN": this.agent.thisDN,
             "agentID": this.agent.agentID
+        };
+        this.connection.send(data);
+    }
+
+    /**
+     * 获取可监控的坐席信息
+     */
+    setAutoReady(isAutoReady = false) {
+        let data = {
+            "messageId": MessageID.RequestAutoReadyConfig,
+            "thisDN": this.agent.thisDN,
+            "agentID": this.agent.agentID,
+            "autoSavePopup": isAutoReady,
         };
         this.connection.send(data);
     }

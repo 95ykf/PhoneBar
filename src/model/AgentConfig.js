@@ -7,6 +7,7 @@ class AgentConfig extends EventEmitter {
 
     /**
      * @param tipTime  设置后每隔*分钟会自动提醒某一状态是否超时;默认0不提醒
+     * @param autoIdleWhenAfterWork  话后自动进入就绪状态;默认null未配置,false不启用
      * @param maxAfterWorkTime  话后持续设置时间后会自动进入就绪状态;默认0不启用
      * @param autoIdleWhenLogin  登录后自动置闲
      * @param isPhoneTakeAlong  是否手机随行，即手机在线，默认为false
@@ -15,6 +16,8 @@ class AgentConfig extends EventEmitter {
      */
     constructor({
                     tipTime = 0,
+
+                    autoIdleWhenAfterWork = null,
                     maxAfterWorkTime = 0,
                     autoIdleWhenLogin = false,
                     isPhoneTakeAlong = false,
@@ -23,6 +26,7 @@ class AgentConfig extends EventEmitter {
                 }) {
         super();
         this._tipTime = tipTime;
+        this._autoIdleWhenAfterWork = autoIdleWhenAfterWork;
         this._maxAfterWorkTime = maxAfterWorkTime;
         this._autoIdleWhenLogin = autoIdleWhenLogin;
         this._isPhoneTakeAlong = isPhoneTakeAlong;
@@ -39,6 +43,14 @@ class AgentConfig extends EventEmitter {
             this._tipTime = value;
             this.emit('change', this, 'tipTime', value);
         }
+    }
+
+    get autoIdleWhenAfterWork() {
+        return this._autoIdleWhenAfterWork;
+    }
+
+    set autoIdleWhenAfterWork(value) {
+        this._autoIdleWhenAfterWork = value;
     }
 
     get maxAfterWorkTime() {

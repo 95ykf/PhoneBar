@@ -31,6 +31,7 @@ class PhoneBar extends EventEmitter {
      * @param thisQueues  所在坐席组,类型Array数组(格式如：[100018000,100018001])
      * @param defaultQueue  默认/签入坐席组,所在技能组中的其中一个
      * @param tipTime  设置后每隔*分钟会自动提醒某一状态是否超时;默认0不提醒
+     * @param autoIdleWhenAfterWork  话后自动进入就绪状态;默认null未配置，false不启用
      * @param maxAfterWorkTime  话后持续设置时间后会自动进入就绪状态;默认0不启用
      * @param autoIdleWhenLogin  登录后自动置闲
      * @param isPhoneTakeAlong  是否手机随行，即手机在线，默认为false
@@ -59,6 +60,7 @@ class PhoneBar extends EventEmitter {
                     defaultQueue = '',
 
                     tipTime = 0,
+                    autoIdleWhenAfterWork = null,
                     maxAfterWorkTime = 0,
                     autoIdleWhenLogin = true,
                     isPhoneTakeAlong = false,
@@ -160,6 +162,26 @@ class PhoneBar extends EventEmitter {
         // 转接菜单列表事件
         this.connection.on(MessageID.EventConferenceMenuList.toString(), (data) => {
             this.updateConferenceMenu(data.menuList);
+        });
+        // 自动就绪配置
+        this.connection.on(MessageID.EventAutoReadyConfig.toString(), (data) => {
+            // 本地未配置时使用服务端配置
+            if (this.agentConfig.autoIdleWhenAfterWork == null) {
+                this.agentConfig.autoIdleWhenAfterWork = data.autoSavePopup;
+            }
+            // 如果服务端与本地不同，更新服务端配置
+            else if (this.agentConfig.autoIdleWhenAfterWork !== data.autoSavePopup && data.maxAfterworkTime !== 0) {
+                this.agentApi.setAutoReady(this.agentConfig.autoIdleWhenAfterWork);
+            }
+            if (this.agentConfig.autoIdleWhenAfterWork) {
+                if (data.maxAfterworkTime === 0) {
+                    utils.showMessage('企业未启用自动就绪，如需开启请联系管理员！');
+                } else {
+                    this.agentConfig.maxAfterWorkTime = data.maxAfterworkTime;
+                }
+            } else {
+                this.agentConfig.maxAfterWorkTime = 0;
+            }
         });
 
         // 监听座席状态定时器
@@ -319,7 +341,7 @@ class PhoneBar extends EventEmitter {
         }
 
         if (action === 'ready') {
-            this.agentApi.agentReady();
+            this.agentApi.agentReady(true);
         } else if (action === 'login') {
             this.agentApi.agentLogin();
         } else if (action === 'logout') {

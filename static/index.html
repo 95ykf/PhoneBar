@@ -91,6 +91,7 @@
                 <legend>坐席配置</legend>
                 <div>
                     <input type="checkbox" id="autoIdleWhenLogin" name="autoIdleWhenLogin" checked="checked"><label for="autoIdleWhenLogin">自动置闲（登录后自动置闲）</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" id="autoIdleWhenAfterWork" name="autoIdleWhenAfterWork"><label for="autoIdleWhenAfterWork">自动置闲（话后）</label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" id="isPhoneTakeAlong" name="isPhoneTakeAlong"><label for="isPhoneTakeAlong">手机随行</label>
                 </div>
             </fieldset>
@@ -143,6 +144,7 @@
             defaultQueue: $('#defaultQueue').val(),
             pstnDN: $('#pstnDN').val(),
 
+            autoIdleWhenAfterWork: $("#autoIdleWhenAfterWork").is(':checked'),
             autoIdleWhenLogin: $("#autoIdleWhenLogin").is(':checked'),
             isPhoneTakeAlong: $("#isPhoneTakeAlong").is(':checked'),
 
