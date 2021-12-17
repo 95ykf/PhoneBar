@@ -141,6 +141,7 @@ class SoftPhoneConnection extends EventEmitter {
     }
 
     doClose() {
+        this.stopPing();
         if (this.isOpened()) {
             this.send({
                 "action" : "close",

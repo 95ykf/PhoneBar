@@ -73,8 +73,8 @@ class CTIConnection extends WebSocketBaseClient {
     }
 
     doClose() {
+        this.stopKeepAlive();
         if (this.isOpened()) {
-            this.stopKeepAlive();
             this.close();
         }
     }
