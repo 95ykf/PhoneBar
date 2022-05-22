@@ -187,6 +187,13 @@ class CTIConnection extends WebSocketBaseClient {
             this.linePool.updateLineDate(data);
         } else if (data.messageId === MessageID.EventError) {
             utils.showMessage(data.errorMessage);
+        } else if(data.messageId==527) {
+            //"send2Agent":"1","digits":"456"
+            if(typeof onDigitCollection === "function"){
+                onDigitCollection(data.digits);
+            }else{
+                utils.showMessage(data.digits);
+            }
         } else if (data.messageId === MessageID.EventLinkDisconnected && data.reason === 1) {
             if (data.reason === 1) {
                 utils.showMessage("该坐席已经从其它地方登入，请退出!");

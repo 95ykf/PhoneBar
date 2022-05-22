@@ -395,8 +395,11 @@ class PhoneBar extends EventEmitter {
         } else if (val.type === "doublestep") {
             // 两步转接
             this.agentApi.consult(val.agentId);
+        } else if (val.type === "btnCollect"){
+            // 按键采集
+            this.agentApi.digitCollections(val.ivrId);
         } else if (val.ivrId) {
-            // 按键采集/转IVR
+            // 转IVR
             this.agentApi.singleStepTransfer(`ivr_${val.ivrId}`);
         } else if (val.type === "singlestep") {
             // 单步转接

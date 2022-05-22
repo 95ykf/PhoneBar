@@ -305,7 +305,29 @@ class AgentApi {
             };
             this.connection.send(data);
         }
-    };
+    }
+
+    /**
+     * 按键采集
+     * @param ivr_id
+     */
+    digitCollections(ivr_id) {
+        let line = this.linePool.getCurrentLine();
+        if(line.callId==''){
+            utils.showMessage("当前线路不在通话中");
+        }else{
+            let data = {
+                "messageId": 227,
+                "thisDN": this.agent.thisDN,
+                "agentID": this.agent.agentID,
+                "ivrID":ivr_id,
+                "state":"begin",
+                "callID": line.callId
+            };
+            this.connection.send(data);
+        }
+    }
+
 
     /**
      * 呼叫转移
