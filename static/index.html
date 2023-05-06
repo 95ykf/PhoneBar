@@ -65,6 +65,7 @@
             <fieldset>
                 <legend>服务器/客户端设置</legend>
                 <div>
+                    <input type="checkbox" id="enableWebRTCPhone" name="enableWebRTCPhone" checked="checked"><label for="enableWebRTCPhone">自动启动软电话</label>
                     <input type="checkbox" id="startupSoftPhone" name="startupSoftPhone" checked="checked"><label for="startupSoftPhone">自动启动软电话</label>
                 </div>
                 <div>
@@ -99,12 +100,21 @@
                 <legend>操作</legend>
                 <label for="digitTxt">二次拨号号码：</label><input type="text" id="digitTxt" name="digitTxt" value="" size="30" maxlength="30">
                 <input onclick="sendDTMF();" type="button" value=" 二次拨号 "/><br/>
-                <input onclick="initPhoneBar();" type="button" value=" 创建话条 "/>
+                <input onclick="init();" type="button" value=" 创建话条 "/>
                 <input onclick="destroy();" type="button" value=" 注销话条 "/>
                 <input onclick="emptyLog();" type="button" value=" 清空日志 "/>
             </fieldset>
         </form>
     </div>
+
+    <!-- 铃音 -->
+    <audio id="ringtone" loop="" src="./sounds/ringtone.wav"></audio>
+    <audio id="ringbacktone" loop="" src="./sounds/ringbacktone.wav"></audio>
+    <audio id="dtmfTone" src="./sounds/dtmf.wav"></audio>
+    <!-- 音视频控件 -->
+    <audio id="audio_remote" autoplay="autoplay"></audio>
+    <video id="video_remote" autoplay="autoplay" muted=""></video>
+    <video id="video_local" autoplay="autoplay" muted="true" ></video>
 
     <!-- 日志 -->
     <div id="log" class="logBox"></div>
@@ -118,10 +128,64 @@
 <link href="https://cdn.bootcss.com/layer/2.3/skin/layer.css" rel="stylesheet">
 <script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
 
+
+<script src="./js/SIPml-api.js"></script>
+<script src="./js/RtcPhone.min.js"></script>
+
 <!-- 新版sdk -->
 <script>
+    // webrtc话机
+    var rtcPhone = null;
     // 电话条
     var phoneBar = null;
+
+    function initRtcPhone() {
+        rtcPhone = new RtcPhone({
+            ringToneDom: 'ringtone',
+            ringbackToneDom: 'ringbacktone',
+
+            audioRemoteDom: 'audio_remote',
+            videoLocalDom: 'video_local',
+            videoRemoteDom: 'video_remote',
+
+            onInitialized: rtcPhoneLogin,
+            onConnected: onConnected,
+            onDisconnected: onDisconnected,
+        });
+        rtcPhone.sipInit();
+    }
+
+    // VoIP注册
+    function rtcPhoneLogin() {
+        var username = $("#corpVccIdTxt").val() + $("#agentIdTxt").val();
+        var realm = "rtc.95ykf.com";
+        rtcPhone.sipRegister({
+            displayName: username,
+            privateIdentity: username,
+            publicIdentity: "sip:"+username+"@"+realm,
+            password: $("#password").val(),
+            realm: realm,
+            websocketProxyUrl: "wss://rtc.95ykf.com:4443",
+        });
+    }
+
+    function onConnected(e) {
+        console.log('connected', e);
+        initPhoneBar();
+    }
+
+    function onDisconnected(e) {
+        console.log('disconnected', e);
+    }
+
+    function init() {
+        var enableRtcPhone = $('#enableWebRTCPhone').is(':checked');
+        if (enableRtcPhone) {
+            initRtcPhone();
+        } else {
+            initPhoneBar()
+        }
+    }
 
     function initPhoneBar() {
         if (phoneBar) {
@@ -155,6 +219,10 @@
             onHangup: function (callInfo) {console.log('挂机事件：', callInfo);},
             onLinkDisconnected: function() {location.href = 'login.html'},
         });
+
+        phoneBar.getComponent('answer').on('click', function(){
+            rtcPhone.sipAnswer();
+        });
     }
 
     function destroy() {
@@ -183,7 +251,7 @@
 </script>
 
 <script type="text/javascript">
-    PhoneBar.Log.log = function (content, msgType) {
+    function printLog(content, msgType) {
         var oTextareaInfo = document.getElementById("log");
         if (oTextareaInfo != null) {
             if (msgType === 'input') {
@@ -215,6 +283,14 @@
         }
 
     }
+
+    PhoneBar.Log.log = printLog;
+    PhoneBar.Log.info = printLog;
+    PhoneBar.Log.error = printLog;
+
+    RtcPhone.Log.log = printLog;
+    RtcPhone.Log.info = printLog;
+    RtcPhone.Log.error = printLog;
 
     function emptyLog() {
         var oTextareaInfo = document.getElementById("log");
