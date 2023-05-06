@@ -32,6 +32,18 @@ phoneBar = new PhoneBar({
 ![示例图片](https://github.com/95ykf/PhoneBar/blob/master/doc/phonebar.png)
 
 ## 开发
+node编译环境使用16版本，如使用16以上版本需要设置全局变量
+
+
+Linux & Mac OS (windows git bash)
+```
+export NODE_OPTIONS=--openssl-legacy-provider
+```
+windows命令提示符:
+```
+set NODE_OPTIONS=--openssl-legacy-provider
+```
+
 ### 安装
 ```
 npm install
