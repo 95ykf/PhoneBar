@@ -152,6 +152,7 @@
             onConnected: onConnected,
             onDisconnected: onDisconnected,
         });
+  
         rtcPhone.sipInit();
     }
 
@@ -220,15 +221,30 @@
             onLinkDisconnected: function() {location.href = 'login.html'},
         });
 
-        phoneBar.getComponent('answer').on('click', function(){
-            rtcPhone.sipAnswer();
-        });
+        var enableRtcPhone = $('#enableWebRTCPhone').is(':checked');
+        if (enableRtcPhone) {
+            // rtc话机呼叫
+            phoneBar.makeCall = function(phoneNumber) {
+                let pn = phoneNumber || phoneBar.dialPad.getPhoneNumber();
+                rtcPhone.sipCall('call-audio', pn);
+            }
+            // rtc话机接听
+            phoneBar.agentApi.answerCall = function() {
+                rtcPhone.sipAnswer();
+            }
+        }
+        
     }
 
     function destroy() {
         if (phoneBar) {
             phoneBar.destroy();
             phoneBar = null;
+        }
+        if (rtcPhone) {
+            console.log("===webRTC destory===");
+            rtcPhone.sipUnRegister();
+            rtcPhone = null;
         }
     }
 
