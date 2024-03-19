@@ -1,6 +1,6 @@
 {
-  "name": "hlPhoneBar",
-  "version": "1.0.8",
+  "name": "hlytx-phone-bar",
+  "version": "1.0.10",
   "description": "hl95 Phone Bar SDK",
   "keywords": [
     "cit",
@@ -51,5 +51,18 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "main": "src/index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/95ykf/PhoneBar.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/95ykf/PhoneBar/issues"
+  },
+  "homepage": "https://github.com/95ykf/PhoneBar#readme"
 }
