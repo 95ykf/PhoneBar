@@ -65,8 +65,8 @@
             <fieldset>
                 <legend>服务器/客户端设置</legend>
                 <div>
-                    <input type="checkbox" id="enableWebRTCPhone" name="enableWebRTCPhone" checked="checked"><label for="enableWebRTCPhone">自动启动软电话</label>
-                    <input type="checkbox" id="startupSoftPhone" name="startupSoftPhone" checked="checked"><label for="startupSoftPhone">自动启动软电话</label>
+                    <input type="radio" id="rtcPhone" name="phoneType" checked="checked"><label for="rtcPhone">启用WebRTC话机</label>
+                    <input type="radio" id="softPhone" name="phoneType"><label for="softPhone">启动软电话</label>
                 </div>
                 <div>
                     <label for="ccHostIpTxt">CTI服务地址：</label><input type="text" id="ccHostIpTxt" name="ccHostIpTxt" value="" size="40" maxlength="40">&nbsp;&nbsp;&nbsp;&nbsp;
@@ -180,7 +180,7 @@
     }
 
     function init() {
-        var enableRtcPhone = $('#enableWebRTCPhone').is(':checked');
+        var enableRtcPhone = $('#rtcPhone').is(':checked');
         if (enableRtcPhone) {
             initRtcPhone();
         } else {
@@ -198,7 +198,7 @@
             renderTo: 'test1',
             proxyUrl: $("#ccHostIpTxt").val(),
             sipServerUrl: $('#sipServerUrl').val(),
-            startupSoftPhone: $('#startupSoftPhone').is(':checked'),
+            startupSoftPhone: $('#softPhone').is(':checked'),
 
             tid: $("#corpVccIdTxt").val(),
             thisDN: $("#corpVccIdTxt").val() + $("#agentIdTxt").val(),
@@ -221,7 +221,7 @@
             onLinkDisconnected: function() {location.href = 'login.html'},
         });
 
-        var enableRtcPhone = $('#enableWebRTCPhone').is(':checked');
+        var enableRtcPhone = $('#rtcPhone').is(':checked');
         if (enableRtcPhone) {
             // rtc话机呼叫
             phoneBar.makeCall = function(phoneNumber) {
